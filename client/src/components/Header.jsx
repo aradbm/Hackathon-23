@@ -1,39 +1,47 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  ThemeProvider,
+} from "@mui/material";
+import { FaRecycle } from "react-icons/fa";
+import theme from "../styles/theme";
 
 export const Header = () => {
+  // when pressing the button, if I'm in the ItemScan page, it will redirect me to the chat page and vice versa
+  const handleButtonClick = () => {
+    if (window.location.pathname === "/itemscan") {
+      window.location.pathname = "/chat";
+    } else {
+      window.location.pathname = "/itemscan";
+    }
+  };
+
   return (
-    <AppBar
-      position="static"
-      color="default"
-      elevation={1}
-      sx={{
-        borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-        bgcolor: "primary.main",
-      }}
-    >
-      <Toolbar sx={{ flexWrap: "wrap" }}>
-        <Typography variant="h5" color="black" noWrap sx={{ flexGrow: 1 }}>
-          Stainability with Renuar
-        </Typography>
-        <Button
-          component={Link}
-          to="/itemscan"
-          sx={{ my: 1, mx: 1.5 }}
-          variant="contained"
-        >
-          Item Scan
-        </Button>
-        <Button
-          component={Link}
-          to="/chat"
-          sx={{ my: 1, mx: 1.5 }}
-          variant="contained"
-        >
-          Chat
-        </Button>
-      </Toolbar>
-    </AppBar>
+    <ThemeProvider theme={theme}>
+      <AppBar position="static" sx={{ backgroundColor: "success.main" }}>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontSize: "1.5rem",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            IFlow Analytics
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<FaRecycle />}
+            onClick={handleButtonClick}
+          >
+            {window.location.pathname === "/itemscan" ? "Chat" : "Item Scan"}
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </ThemeProvider>
   );
 };

@@ -19,6 +19,7 @@ app.listen(PORT, () => {
   console.log(`Server listening to port ${PORT} on http://localhost:${PORT}`);
 });
 
+
 app.get('/', async (req, res) => {
   let id = req.query.id;
   let currentDate = new Date();
