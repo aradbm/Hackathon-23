@@ -17,6 +17,7 @@ export const ItemScan = () => {
     });
   };
 
+
   useEffect(() => {
     const interval = setInterval(() => {
       const randomData = createRandomData();

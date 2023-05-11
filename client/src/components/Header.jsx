@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { FaRecycle } from "react-icons/fa";
 import theme from "../styles/theme";
+
 export const Header = () => {
   // when pressing the button, if I'm in the ItemScan page, it will redirect me to the chat page and vice versa
   const handleButtonClick = () => {

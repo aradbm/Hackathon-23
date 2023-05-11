@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = 5001;
 
-let Axios = require("axios");
+const pg_connector = require("./pg_connector.js");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -19,45 +19,32 @@ app.listen(PORT, () => {
   console.log(`Server listening to port ${PORT} on http://localhost:${PORT}`);
 });
 
-app.get("/", (req, res) => {
-  res.send("Main page");
-});
 
-app.get("/:id", (req, res) => {
-  const id = req.query.id;
-  console.log(id);
-  // console.log(Date.getDate());
-  // let obj = {
-  //   makat: id,
-  //   readerLocation: "12",
-  //   type: "T-shirt",
-  //   color: "red",
-  //   size: "L",
-  //   price: 100,
-  //   timestamp: Date.getDate(),
-  //   snif: "Dizingoff_center",
-  // };
+app.get('/', async (req, res) => {
+  let id = req.query.id;
+  let currentDate = new Date();
 
-  res.send("ok");
-});
-
-//get user with /id in url
-app.get("/users/:id", (req, res) => {
-  //find user by id and return it to client
-  const userFound = users.find((user) => user.id === req.params.id);
-  if (userFound !== undefined) {
-    res.json(userFound);
-  } else {
-    res.json({ message: "User not found" });
+  let obj = { makat: id, product_type: 'T-shirt', price: 100, color: 'red', product_size: 'L', scan_date: convertUnixTimestamp(currentDate.getTime()), scan_location: 'booths', snif: 'dizingoff_center' };
+  let result = await pg_connector.insert_product(obj)
+  if (result.err) {
+    console.error('Error executing function:', result.err);
+    return res.sendStatus(503)
   }
+
+  // console.log(result.data);
+  res.send('ok');
 });
 
-async function fetchExcuse(req, res) {
-  console.log(req.query.theme);
-  let theme = await Axios.get(
-    `https://excuser-three.vercel.app/v1/excuse/${req.query.theme}/`
-  );
-  return theme.data;
+// converts unixtimestamp to a YYYY-MM-DD HH:mm:ss datetime format
+convertUnixTimestamp = (unixTimestamp) => {
+  const date = new Date(unixTimestamp);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // add leading zero if necessary
+  const day = String(date.getDate()).padStart(2, '0'); // add leading zero if necessary
+  const hour = String(date.getHours()).padStart(2, '0'); // add leading zero if necessary
+  const minute = String(date.getMinutes()).padStart(2, '0'); // add leading zero if necessary
+  const second = String(date.getSeconds()).padStart(2, '0'); // add leading zero if necessary
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 
 function logger(req, res, next) {
