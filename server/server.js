@@ -3,6 +3,8 @@ const app = express();
 const PORT = 5001;
 
 const pg_connector = require("./pg_connector.js");
+const getRandomItem = require("./local_db.js").getRandomItem;
+const generateRandomDate = require("./local_db.js").generateRandomDate;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -19,12 +21,13 @@ app.listen(PORT, () => {
   console.log(`Server listening to port ${PORT} on http://localhost:${PORT}`);
 });
 
-app.get('/', async (req, res) => {
-  let id = req.query.id;
-  let currentDate = new Date();
+app.get("/", (req, res) => {
+  res.send("main page");
+});
 
-  let obj = { makat: id, product_type: 'T-shirt', price: 100, color: 'red', product_size: 'L', scan_date: convertUnixTimestamp(currentDate.getTime()), scan_location: 'booths', snif: 'dizingoff_center' };
-  let result = await pg_connector.insert_product(obj)
+app.get('/i', async (req, res) => {
+  let id = req.query.id;
+  let result = await pg_connector.insert_product(getRandomItem(id));
   if (result.err) {
     console.error('Error executing function:', result.err);
     return res.sendStatus(503)
@@ -34,17 +37,9 @@ app.get('/', async (req, res) => {
   res.send('ok');
 });
 
-// converts unixtimestamp to a YYYY-MM-DD HH:mm:ss datetime format
-convertUnixTimestamp = (unixTimestamp) => {
-  const date = new Date(unixTimestamp);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // add leading zero if necessary
-  const day = String(date.getDate()).padStart(2, '0'); // add leading zero if necessary
-  const hour = String(date.getHours()).padStart(2, '0'); // add leading zero if necessary
-  const minute = String(date.getMinutes()).padStart(2, '0'); // add leading zero if necessary
-  const second = String(date.getSeconds()).padStart(2, '0'); // add leading zero if necessary
-  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-}
+app.get('/date', (req, res) => {
+  res.send(generateRandomDate(new Date(), new Date(2023, 5, 12)));
+});
 
 function logger(req, res, next) {
   console.log(req.originalUrl);
