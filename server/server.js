@@ -24,7 +24,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api", (req, res) => {
-  res.json({ message: `id: ${req.query.id}!` });
+  if(req.query.id !== undefined)
+    res.json({ message: `id: ${req.query.id}!` });
 });
 
 
