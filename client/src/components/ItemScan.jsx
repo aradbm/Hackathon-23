@@ -13,7 +13,7 @@ export const ItemScan = () => {
     });
   };
   return (
-    <Box sx={{ m: 2 }}>
+    <Box>
       <Typography>Enter 8 digit product ID:</Typography>
       <TextField
         id="outlined-basic"
