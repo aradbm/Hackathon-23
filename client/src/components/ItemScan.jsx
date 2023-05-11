@@ -9,12 +9,12 @@ export const ItemScan = () => {
 
   const fetchData = (props) => {
     setLog((prevLog) => [{ sent: props, received: "..." }, ...prevLog]);
-    // axios.get(`http://localhost:5001/api?id=${props}`).then((response) => {
-    //   setData((prevData) => [
-    //     { sent: props, received: response.data },
-    //     ...prevData,
-    //   ]);
-    // });
+    axios.get(`http://localhost:5001/i?id=${props}`).then((response) => {
+      setData((prevData) => [
+        { sent: props, received: response.data },
+        ...prevData,
+      ]);
+    });
   };
 
   useEffect(() => {

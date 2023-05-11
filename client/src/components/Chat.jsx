@@ -70,7 +70,6 @@ export const Chat = () => {
   return (
     <ThemeProvider theme={theme}>
       <React.Fragment>
-        {/* ------------------------------------------ */}
         <Container maxWidth="sm">
           <Typography variant="h4" component="h1" gutterBottom>
             Renuar's Chatbot
@@ -80,11 +79,11 @@ export const Chat = () => {
             sx={{
               borderRadius: 1,
               padding: 2,
-              minHeight: "300px",
-              maxHeight: "300px",
+              minHeight: "450px",
+              maxHeight: "450px",
               overflowY: "auto",
               backgroundImage:
-                "conic-gradient(from 124deg at 0% 0%, #009688, #3f51b5)",
+                "conic-gradient(from 145deg at 10% 0%, #009688, #3f51b5)",
             }}
           >
             <List>
@@ -126,7 +125,10 @@ export const Chat = () => {
           <Stack
             direction="row"
             spacing={2}
-            sx={{ marginTop: 2, marginBottom: 2 }}
+            sx={{
+              marginTop: 2,
+              marginBottom: 2,
+            }}
           >
             <TextField
               fullWidth
@@ -139,6 +141,7 @@ export const Chat = () => {
                   sendMessage();
                 }
               }}
+              color="primary"
             />
             <IconButton
               color="primary"
