@@ -14,9 +14,10 @@ const convertUnixTimestamp = (unixTimestamp) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // add leading zero if necessary
     const day = String(date.getDate()).padStart(2, '0'); // add leading zero if necessary
-    const hour = String(date.getHours()).padStart(2, '0'); // add leading zero if necessary
+    const hour = String(date.getHours() + 9).padStart(2, '0'); // add leading zero if necessary
     const minute = String(date.getMinutes()).padStart(2, '0'); // add leading zero if necessary
     const second = String(date.getSeconds()).padStart(2, '0'); // add leading zero if necessary
+
     return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
   };
   
@@ -35,7 +36,7 @@ const generateRandomDate = (from, to) => {
       price: prices[Math.floor(Math.random() * prices.length)],
       color: colors[Math.floor(Math.random() * colors.length)],
       size: sizes[Math.floor(Math.random() * sizes.length)],
-      scan_date: generateRandomDate(new Date(), new Date(2023, 5, 12)),
+      scan_date: convertUnixTimestamp(generateRandomDate(new Date(2023, 5, 13), currentDate)),
       store_location: store_locations[Math.floor(Math.random() * store_locations.length)],
       snif: snifim[Math.floor(Math.random() * snifim.length)]
     };
@@ -44,3 +45,4 @@ const generateRandomDate = (from, to) => {
   
   module.exports.getRandomItem = getRandomItem;
   module.exports.generateRandomDate = generateRandomDate;
+  module.exports.convertUnixTimestamp = convertUnixTimestamp;
