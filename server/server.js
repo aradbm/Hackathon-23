@@ -26,13 +26,13 @@ app.get("/", (req, res) => {
 app.get("/:id", (req, res) => {
   const id = req.query.id;
   console.log(id);
-  console.log(Date.getDate());
-  let obj = { makat: id, readerLocation: "12" , type: "T-shirt", color: "red", size: "L", price: 100, timestamp: Date.getDate(), snif: "Dizingoff_center" };
-  
-  
+  let currentDate = new Date();
+  console.log(currentDate.getTime());
 
-  
-  
+  let obj = { makat: id, readerLocation: "12" , type: "T-shirt", color: "red", size: "L", price: 100, timestamp: currentDate.getTime(), snif: "Dizingoff_center" };
+  const pool = require("./PgConnector");
+  let result = pool.query(`SELECT insert_product($1, $2, $3, $4, $5, $6, $7, $8)`, [obj.makat, obj.readerLocation, obj.type, obj.color, obj.size, obj.price, obj.timestamp, obj.snif]);
+  console.log(result);
   res.send("ok");
 });
 
