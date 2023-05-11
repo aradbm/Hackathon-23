@@ -23,9 +23,17 @@ app.get("/", (req, res) => {
   res.send("Main page");
 });
 
-app.get("/api", (req, res) => {
-  if(req.query.id !== undefined)
-    res.json({ message: `id: ${req.query.id}!` });
+app.get("/:id", (req, res) => {
+  const id = req.query.id;
+  console.log(id);
+  console.log(Date.getDate());
+  let obj = { makat: id, readerLocation: "12" , type: "T-shirt", color: "red", size: "L", price: 100, timestamp: Date.getDate(), snif: "Dizingoff_center" };
+  
+  
+
+  
+  
+  res.send("ok");
 });
 
 

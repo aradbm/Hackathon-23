@@ -7,7 +7,7 @@ export const ItemScan = () => {
   const [data, setData] = useState("");
   const [input, setInput] = useState("");
   const fetchData = (props) => {
-    Axios.get(`http://localhost:5001/api/${props}`).then((response) => {
+    Axios.get(`http://localhost:5001/api?id=${props}`).then((response) => {
       setData(response.data);
       console.log(response.data);
     });
