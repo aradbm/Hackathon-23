@@ -23,35 +23,42 @@ app.get("/", (req, res) => {
   res.send("Main page");
 });
 
-app.get("/api", (req, res) => {
-  res.json({ message: `id: ${req.query.id}!` });
+app.get("/:id", (req, res) => {
+  const id = req.query.id;
+  console.log(id);
+  // console.log(Date.getDate());
+  // let obj = {
+  //   makat: id,
+  //   readerLocation: "12",
+  //   type: "T-shirt",
+  //   color: "red",
+  //   size: "L",
+  //   price: 100,
+  //   timestamp: Date.getDate(),
+  //   snif: "Dizingoff_center",
+  // };
+
+  res.send("ok");
 });
-
-
-
-
-
 
 //get user with /id in url
 app.get("/users/:id", (req, res) => {
   //find user by id and return it to client
-  const userFound = users.find(user => user.id === req.params.id);
-  if(userFound !== undefined) {
+  const userFound = users.find((user) => user.id === req.params.id);
+  if (userFound !== undefined) {
     res.json(userFound);
   } else {
-    res.json({message: 'User not found'});
+    res.json({ message: "User not found" });
   }
 });
 
-
-
-async function fetchExcuse(req,res) 
-{
+async function fetchExcuse(req, res) {
   console.log(req.query.theme);
-  let theme = await Axios.get(`https://excuser-three.vercel.app/v1/excuse/${req.query.theme}/`);
+  let theme = await Axios.get(
+    `https://excuser-three.vercel.app/v1/excuse/${req.query.theme}/`
+  );
   return theme.data;
-};
-
+}
 
 function logger(req, res, next) {
   console.log(req.originalUrl);
