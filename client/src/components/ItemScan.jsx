@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import SyncIcon from "@mui/icons-material/Sync";
+import { Box, Button, ThemeProvider, Typography } from "@mui/material";
+import RadarSharpIcon from "@mui/icons-material/RadarSharp";
 import axios from "axios";
-
+import theme from "../styles/theme";
 export const ItemScan = () => {
   const [data, setData] = useState([]);
   const [log, setLog] = useState([]);
@@ -31,39 +31,48 @@ export const ItemScan = () => {
   };
 
   return (
-    <Box>
-      <Typography>Every second a icon is being scanned:</Typography>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "20px",
-        }}
-      >
-        <Box
-          onClick={() => {
-            const randomData = createRandomData();
-            fetchData(randomData);
-          }}
+    <ThemeProvider theme={theme}>
+      <Box>
+        <Typography
           sx={{
-            backgroundColor: "inherit",
-            "&:hover": {
-              backgroundColor: "inherit",
-            },
-            "&:focus": {
-              backgroundColor: "inherit",
-            },
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "1rem",
           }}
         >
-          <SyncIcon
-            sx={{
-              fontSize: "10rem",
-              animation: "iconPulse 1s infinite alternate",
+          Every second an icon is being scanned:
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Box
+            onClick={() => {
+              const randomData = createRandomData();
+              fetchData(randomData);
             }}
-          />
+            sx={{
+              backgroundColor: "inherit",
+              "&:hover": {
+                backgroundColor: "inherit",
+              },
+              "&:focus": {
+                backgroundColor: "inherit",
+              },
+            }}
+          >
+            <RadarSharpIcon
+              sx={{
+                fontSize: "10rem",
+                animation: "iconPulse 1s infinite alternate",
+              }}
+            />
+          </Box>
         </Box>
-      </Box>
-      <style>{`
+        <style>{`
         @keyframes iconPulse {
           0% {
             transform: scale(1) rotate(0deg);
@@ -73,23 +82,33 @@ export const ItemScan = () => {
           }
         }
       `}</style>
-      <Box>
-        <Typography>Log:</Typography>
-        <Box
-          sx={{
-            maxHeight: "300px",
-            overflowY: "scroll",
-            border: "2px solid black",
-            borderRadius: "10px",
-            padding: "5px",
-            m: 1,
-          }}
-        >
-          {log.map((item, index) => (
-            <Typography key={index}>Sent: {item.sent}</Typography>
-          ))}
+        <Box>
+          <Typography
+            sx={{
+              display: "flex",
+              fontSize: "2rem",
+              justifyContent: "center",
+            }}
+          >
+            Log:
+          </Typography>
+          <Box
+            sx={{
+              maxHeight: "300px",
+              overflowY: "scroll",
+              border: "2px solid black",
+              borderRadius: "10px",
+              padding: "5px",
+              m: 1,
+              bgcolor: "background.paper",
+            }}
+          >
+            {log.map((item, index) => (
+              <Typography key={index}>Scanned item: {item.sent}</Typography>
+            ))}
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 };

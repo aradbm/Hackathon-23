@@ -3,23 +3,21 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#64b5f6",
-      main: "#2196f3",
-      dark: "#1976d2",
-      contrastText: "#fff",
+      main: "#000000", // black
     },
     secondary: {
-      light: "#80cbc4",
-      main: "#4db6ac",
-      dark: "#00897b",
-      contrastText: "#000",
+      main: "#ffffff", // white
+    },
+    success: {
+      main: "#4caf50", // green
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         outlined: {
-          backgroundColor: "lightblue",
+          backgroundColor: "#000000", // black
+          color: "#ffffff", // white
         },
       },
       defaultProps: {
@@ -27,9 +25,9 @@ const theme = createTheme({
           my: 1,
           mx: 1.5,
           ":hover": {
-            bgcolor: "secondary.light",
+            bgcolor: "#4caf50", // green
           },
-          border: "2px black solid",
+          border: "2px solid #000000", // black
         },
       },
     },
