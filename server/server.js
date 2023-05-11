@@ -5,6 +5,7 @@ const PORT = 5001;
 const pg_connector = require("./pg_connector.js");
 const getRandomItem = require("./local_db.js").getRandomItem;
 const generateRandomDate = require("./local_db.js").generateRandomDate;
+const convertUnixTimestamp = require("./local_db.js").convertUnixTimestamp;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -32,13 +33,34 @@ app.get('/i', async (req, res) => {
     console.error('Error executing function:', result.err);
     return res.sendStatus(503)
   }
-
-  // console.log(result.data);
   res.send('ok');
 });
 
-app.get('/date', (req, res) => {
-  res.send(generateRandomDate(new Date(), new Date(2023, 5, 12)));
+const sleep = (min, max) => {
+  const delay = Math.floor(Math.random() * (max - min + 1)) + min;
+  return new Promise((resolve) => setTimeout(resolve, delay));
+};
+
+const minDelay = 1000; // Minimum delay in milliseconds
+const maxDelay = 10000; // Maximum delay in milliseconds
+
+app.get('/db', async (req, res) => {
+  let id = req.query.id;
+  for(let i = 0; i < 1000; i++){
+    sleep(minDelay, maxDelay);
+    let result = await pg_connector.insert_product(getRandomItem(id));
+    if (result.err) {
+      console.error('Error executing function:', result.err);
+      return res.sendStatus(503)
+    }
+
+  }
+  res.send('ok');
+});
+
+
+app.get('/time', (req, res) => {
+  res.send(convertUnixTimestamp(new Date().getTime()));
 });
 
 function logger(req, res, next) {
