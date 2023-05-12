@@ -32,7 +32,7 @@ app.get('/i', async (req, res) => {
   let result = await pg_connector.insert_product(getRandomItem(id));
   if (result.err) {
     console.error('Error executing function:', result.err);
-    return res.sendStatus(503)
+    return res.sendStatus(503);
   }
   res.send('ok');
 });
