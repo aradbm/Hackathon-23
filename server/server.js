@@ -6,6 +6,7 @@ const pg_connector = require("./pg_connector.js");
 const getRandomItem = require("./local_db.js").getRandomItem;
 const generateRandomDate = require("./local_db.js").generateRandomDate;
 const convertUnixTimestamp = require("./local_db.js").convertUnixTimestamp;
+const run = require("./chatbot.js").run;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -58,6 +59,9 @@ app.get('/db', async (req, res) => {
   res.send('ok');
 });
 
+app.get('/chatbot', async (req, res) => {
+  res.send(await run(req.query.message));
+});
 
 app.get('/time', (req, res) => {
   res.send(convertUnixTimestamp(new Date().getTime()));
