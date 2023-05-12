@@ -42,12 +42,12 @@ export const Chat = () => {
       { sender: "user", text: input },
     ]);
     axios
-      .get(`https://excuser-three.vercel.app/v1/excuse/${input}/`)
+      .get(`https://localhost/chatbot?message=${input}/`)
       .then((response) => {
-        const excuse = response.data[0].excuse;
+        const output = response.message;
         setMessages((prevMessages) => [
           ...prevMessages,
-          { sender: "bot", text: excuse },
+          { sender: "bot", text: output },
         ]);
       })
       .catch((error) => {
