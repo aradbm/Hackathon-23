@@ -3,6 +3,10 @@ const app = express();
 const PORT = 5001;
 
 const pg_connector = require("./pg_connector.js");
+const getRandomItem = require("./local_db.js").getRandomItem;
+const generateRandomDate = require("./local_db.js").generateRandomDate;
+const convertUnixTimestamp = require("./local_db.js").convertUnixTimestamp;
+const run = require("./chatbot.js").run;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -19,33 +23,49 @@ app.listen(PORT, () => {
   console.log(`Server listening to port ${PORT} on http://localhost:${PORT}`);
 });
 
+app.get("/", (req, res) => {
+  res.send("main page");
+});
 
-app.get('/', async (req, res) => {
+app.get('/i', async (req, res) => {
   let id = req.query.id;
-  let currentDate = new Date();
-
-  let obj = { makat: id, product_type: 'T-shirt', price: 100, color: 'red', product_size: 'L', scan_date: convertUnixTimestamp(currentDate.getTime()), scan_location: 'booths', snif: 'dizingoff_center' };
-  let result = await pg_connector.insert_product(obj)
+  let result = await pg_connector.insert_product(getRandomItem(id));
   if (result.err) {
     console.error('Error executing function:', result.err);
-    return res.sendStatus(503)
+    return res.sendStatus(503);
   }
-
-  // console.log(result.data);
   res.send('ok');
 });
 
-// converts unixtimestamp to a YYYY-MM-DD HH:mm:ss datetime format
-convertUnixTimestamp = (unixTimestamp) => {
-  const date = new Date(unixTimestamp);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // add leading zero if necessary
-  const day = String(date.getDate()).padStart(2, '0'); // add leading zero if necessary
-  const hour = String(date.getHours()).padStart(2, '0'); // add leading zero if necessary
-  const minute = String(date.getMinutes()).padStart(2, '0'); // add leading zero if necessary
-  const second = String(date.getSeconds()).padStart(2, '0'); // add leading zero if necessary
-  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-}
+const sleep = (min, max) => {
+  const delay = Math.floor(Math.random() * (max - min + 1)) + min;
+  return new Promise((resolve) => setTimeout(resolve, delay));
+};
+
+const minDelay = 1000; // Minimum delay in milliseconds
+const maxDelay = 10000; // Maximum delay in milliseconds
+
+app.get('/db', async (req, res) => {
+  let id = req.query.id;
+  for(let i = 0; i < 1000; i++){
+    sleep(minDelay, maxDelay);
+    let result = await pg_connector.insert_product(getRandomItem(id));
+    if (result.err) {
+      console.error('Error executing function:', result.err);
+      return res.sendStatus(503)
+    }
+
+  }
+  res.send('ok');
+});
+
+app.get('/chatbot', async (req, res) => {
+  res.send(await run(req.query.message));
+});
+
+app.get('/time', (req, res) => {
+  res.send(convertUnixTimestamp(new Date().getTime()));
+});
 
 function logger(req, res, next) {
   console.log(req.originalUrl);
