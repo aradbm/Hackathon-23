@@ -42,19 +42,20 @@ export const Chat = () => {
       { sender: "user", text: input },
     ]);
     axios
-      .get(`https://localhost/chatbot?message=${input}/`)
+      .get(`https://localhost:5001/chatbot?message=${input}`)
       .then((response) => {
-        const output = response.message;
+        //const output = response.message;
+        console.log(response);
         setMessages((prevMessages) => [
           ...prevMessages,
           { sender: "bot", text: output },
         ]);
       })
       .catch((error) => {
-        console.error("Error fetching excuse:", error);
+        console.error("Error fetching answer:", error);
         setMessages((prevMessages) => [
           ...prevMessages,
-          { sender: "bot", text: "Sorry, I couldn't fetch an excuse." },
+          { sender: "bot", text: "Sorry, I couldn't fetch an answer." },
         ]);
       });
     setInput("");
